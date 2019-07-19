@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+	
+<sqlMapConfig>
+	
+	<!--  
+		ibatis 환경 설정
+			- useStatementNamespaces : 쿼리를 실행할 때 "namespace명. 쿼리아이디"의 형식으로 정의해야한다.
+										template.queryForObject("user.getUserById", id)
+	-->
+	<settings useStatementNamespaces="true"/>
+	
+	<!--  
+		VO 클래스에 대한 별칭 등록하기
+	-->
+	<typeAlias alias="FreeBoard"		type="com.sample.portal.vo.FreeBoard"/>
+	<typeAlias alias="FreeBoardComment"	type="com.sample.portal.vo.FreeBoardComment"/>
+	<typeAlias alias="Notice"			type="com.sample.portal.vo.Notice"/>
+	<typeAlias alias="User"				type="com.sample.portal.vo.User"/>
+	
+	<!--  
+		매퍼 파일 등록
+	-->
+	<sqlMap resource="META-INF/ibatis/mappers/freeboards.xml"/>
+	<sqlMap resource="META-INF/ibatis/mappers/notices.xml"/>
+	<sqlMap resource="META-INF/ibatis/mappers/users.xml"/>
+</sqlMapConfig>

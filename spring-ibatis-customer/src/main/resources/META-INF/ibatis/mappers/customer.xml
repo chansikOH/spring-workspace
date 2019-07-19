@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap>
+	<typeAlias alias="Customer" type="kr.co.jhta.vo.Customer"/>
+	
+	<select id="getAllCustomers" resultClass="Customer">
+		select
+			cust_no as no,
+			cust_name as name,
+			cust_nick_name as nickName,
+			cust_tel as tel,
+			cust_email as email,
+			cust_city as city,
+			cust_point as point,
+			create_date as createDate
+		from
+			customers
+		order by 
+			cust_no asc
+	</select>
+	
+	<select id="getCustomerByNo" parameterClass="int" resultClass="Customer">
+		select
+			cust_no as no,
+			cust_name as name,
+			cust_nick_name as nickName,
+			cust_tel as tel,
+			cust_email as email,
+			cust_city as city,
+			cust_point as point,
+			create_date as createDate
+		from
+			customers
+		where
+			cust_no = #value#
+	</select>
+	
+	<insert id="insertCustomer" parameterClass="Customer">
+		insert into customers(cust_no, cust_name, cust_nick_name, cust_tel, cust_email, cust_city)
+		values(cust_seq.nextval, #name#, #nickName#, #tel#, #email#, #city#)
+	</insert>
+	
+	<select id="getCustomersBySearch" parameterClass="map" resultClass="Customer">
+		select
+			cust_no as no,
+			cust_name as name,
+			cust_nick_name as nickName,
+			cust_tel as tel,
+			cust_email as email,
+			cust_city as city,
+			cust_point as point,
+			create_date as createDate
+		from
+			customers
+		<dynamic>
+			<isEqual property="option" compareValue="no">
+				where cust_no like '%' || #keyword# || '%'
+			</isEqual>
+			<isEqual property="option" compareValue="name">
+				where cust_name like '%' || #keyword# || '%'
+			</isEqual>
+			<isEqual property="option" compareValue="nickName">
+				where cust_nick_name like '%' || #keyword# || '%'
+			</isEqual>
+		</dynamic>
+		order by cust_no asc
+	</select>
+	
+	<update id="updateCustomer" parameterClass="Customer">
+		update
+			customers
+		set
+			cust_name = #name#,
+			cust_nick_name = #nickName#,
+			cust_tel = #tel#,
+			cust_email = #email#,
+			cust_city = #city#,
+			cust_point = #point#
+		where
+			cust_no = #no#
+	</update>
+	
+	<delete id="deleteCustomerByNo" parameterClass="int">
+		delete customers where cust_no = #value#
+	</delete>
+</sqlMap>

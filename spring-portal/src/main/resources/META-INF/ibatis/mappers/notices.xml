@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="notice">
+
+	<insert id="addNotice" parameterClass="Notice">
+		insert into portal_notices
+		(notice_no, notice_title, notice_contents, notice_attachment)
+		values
+		(sample_seq.nextval, #title#, #contents#, #attachment:VARCHAR#)
+	</insert>
+	
+	<resultMap class="Notice" id="NoticeResultMap">
+		<result property="no" column="notice_no"/>
+		<result property="title" column="notice_title"/>
+		<result property="contents" column="notice_contents"/>
+		<result property="attachment" column="notice_attachment"/>
+		<result property="createDate" column="notice_create_date"/>
+	</resultMap>
+	
+	<select id="getAllNotices" resultMap="NoticeResultMap">
+		select
+			*
+		from
+			portal_notices
+		order by 
+			notice_no desc			
+	</select>
+	
+	<select id="getNoticeByNo" parameterClass="int" resultMap="NoticeResultMap">
+		select
+			*
+		from
+			portal_notices
+		where 
+			notice_no = #value#
+	</select>
+</sqlMap>

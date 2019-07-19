@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="user">
+	<insert id="addUser" parameterClass="User">
+		insert into spring_users (user_id, user_name, user_password, user_email)
+		values (#id#, #name#, #password#, #email#)
+	</insert>
+	
+	<select id="getUserById" parameterClass="string" resultClass="User">
+		select
+			user_id as id,
+			user_name as name,
+			user_password as password,
+			user_email as email,
+			user_active as active,
+			user_create_date as createDate
+		from
+			spring_users
+		where
+			user_id = #value#
+	</select>
+</sqlMap>

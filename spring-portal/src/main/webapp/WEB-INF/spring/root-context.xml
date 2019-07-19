@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!--  
+		Properties 파일의 설정정보를 로드하는 클래스를 스프링의 빈으로 등록한다.
+	-->
+	<context:property-placeholder location="classpath:/META-INF/db/database.properties"/>
+	
+	<!--  
+		커넥션풀(DataSource객체)를 스프링의 빈으로 등록한다.
+	-->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" 
+		p:driverClassName="${db.driver}"
+		p:url="${db.url}"
+		p:username="${db.username}"
+		p:password="${db.password}"/>
+		
+	<!--  
+		ibatis 핵심객체를 스프링의 빈으로 등록한다.
+	-->
+	<bean id="sqlMap"
+		class="org.springframework.orm.ibatis.SqlMapClientFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:configLocation="classpath:/META-INF/ibatis/ibatis-config.xml" />
+	
+	<!-- 
+		ibatis용 템플릿을 스프링의 빈으로 등록한다.
+	 -->
+	 <bean id="sqlMapClientTemplate"
+	 	class="org.springframework.orm.ibatis.SqlMapClientTemplate"
+	 	p:sqlMapClient-ref="sqlMap"/>
+	 
+	<!--  
+		서비스 클래스, DAO 클래스를 스프링의 빈으로 등록한다.
+	-->
+	<context:component-scan base-package="com.sample.portal">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+</beans>

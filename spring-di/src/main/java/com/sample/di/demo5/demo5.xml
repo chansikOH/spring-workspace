@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="userService" class="com.sample.di.demo5.UserService">
+		<property name="userDao" ref="userDao"></property>
+		<property name="pointDao" ref="pointDao"></property>
+	</bean>
+	<bean id="userDao" class="com.sample.di.demo5.UserDummyDao"></bean>
+	<bean id="pointDao" class="com.sample.di.demo5.PointDummyDao"></bean>
+
+</beans>

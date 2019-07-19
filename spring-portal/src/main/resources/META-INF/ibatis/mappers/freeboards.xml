@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="freeboard">
+
+	<resultMap class="FreeBoard" id="FreeBoardResultMap">
+		<result property="no" column="board_no"/>
+		<result property="title" column="board_title"/>
+		<result property="writer" column="board_writer"/>
+		<result property="contents" column="board_contents"/>
+		<result property="fileName1" column="board_filename1"/>
+		<result property="fileName2" column="board_filename2"/>
+		<result property="fileName3" column="board_filename3"/>
+		<result property="createDate" column="board_create_date"/>
+	</resultMap>
+	
+	<select id="getAllFreeBoards" resultMap="FreeBoardResultMap">
+		select
+			*
+		from 
+			portal_free_boards
+		order by
+			board_no asc
+	</select>
+	
+	<select id="getFreeBoardByNo" parameterClass="int" resultMap="FreeBoardResultMap">
+		select
+			*
+		from
+			portal_free_boards
+		where
+			board_no = #value#
+	</select>
+	
+	<insert id="insertFreeBoard" parameterClass="FreeBoard">
+		insert into portal_free_boards
+			(board_no, board_title, board_writer, board_contents, board_filename1, board_filename2, board_filename3)
+		values
+			(board_seq.nextval, #title#, #writer#, #contents#, #fileName1:VARCHAR#, #fileName2:VARCHAR#, #fileName3:VARCHAR#)
+	</insert>
+	
+	<insert id="addComment" parameterClass="FreeBoardComment">
+		insert into portal_freeboard_comments
+		(comment_no, comment_writer, comment_contents, board_no)
+		values
+		(board_seq.nextval, #writer#, #contents#, #boardNo#)
+	</insert>
+	
+	<select id="getCommentsByBoardNo" parameterClass="int" resultClass="FreeBoardComment">
+		select
+			comment_no as no,
+			comment_writer as writer,
+			comment_contents as contents,
+			comment_create_date as createDate,
+			board_no as boardNo
+		from
+			portal_freeboard_comments
+		where
+			board_no = #value#
+		order by 
+			comment_no asc
+	</select>
+</sqlMap>

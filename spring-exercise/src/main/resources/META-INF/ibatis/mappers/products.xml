@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="product">
+
+	<resultMap class="Product" id="productResultMap">
+		<result property="no" column="product_no"/>
+		<result property="name" column="product_name"/>
+		<result property="categoryId" column="category_id"/>
+		<result property="imgName" column="product_img_name"/>
+		<result property="price" column="product_price"/>
+		<result property="summary" column="product_summary"/>
+		<result property="soldOut" column="product_sold_out"/>
+		<result property="type" column="product_type"/>
+		<result property="createDate" column="product_create_date"/>
+	</resultMap>
+
+	<select id="getProductByNo" parameterClass="int" resultMap="productResultMap">
+		select
+			*
+		from
+			spring_products
+		where
+			product_no = #value#
+	</select>
+	
+	<select id="getAllProducts" resultMap="productResultMap">
+		select
+			*
+		from
+			spring_products
+		order by
+			product_no asc
+	</select>
+	
+	<update id="updateProduct" parameterClass="Product">
+		update
+			spring_products
+		set
+			product_name = #name#,
+			category_id = #categoryId#,
+			product_img_name = #imgName#,
+			product_price = #price#,
+			product_summary = #summary#,
+			product_sold_out = #soldOut#,
+			product_type = #type#,
+			product_create_date = #createDate#
+		where
+			product_no = #no#			
+	</update>
+
+	<select id="getTopNproductsByKeyword" parameterClass="string" resultMap="productResultMap">
+		select
+			*
+		from
+			(select
+				product_no,
+				product_name,
+				category_id,
+				product_img_name,
+				product_price,
+				product_summary,
+				product_sold_out,
+				product_type,
+				product_create_date
+			from 
+				spring_products
+			where
+				product_sold_out = 'N' 
+			and
+				product_type = #value#
+			order by 
+				product_no desc)
+		where
+			rownum &lt;= 4
+	</select>
+	
+	<select id="getAllProductsByKeyword" parameterClass="string" resultMap="productResultMap">
+		select
+			*
+		from 
+			spring_products
+		where
+			product_sold_out = 'N'
+		and 
+			product_type = #value#		
+		order by 
+			product_no desc
+	</select>
+
+	<select id="getProductsByCategoryId" parameterClass="string" resultMap="productResultMap">
+		select
+			*
+		from
+			spring_products
+		where
+			product_sold_out = 'N'
+		and
+			category_id = #value#
+	</select>
+	
+	<select id="getAllCategories" resultClass="Category">
+		select
+			category_id as id,
+			category_name as name
+		from
+			spring_categories
+		order by
+			category_id
+	</select>
+	
+	<select id="getProductsByUserCart" parameterClass="string" resultMap="productResultMap">
+		select
+			*
+		from
+			spring_products
+		where
+			product_no in (select
+								product_no
+							from
+								spring_carts
+							where
+								user_id = #value#)
+		order by
+			product_no
+	</select>
+</sqlMap>

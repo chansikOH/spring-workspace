@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!--  
+		Root Spring Container
+			- ContextLoaderListener가 생성하는 스프링 컨테이너이다.
+			- 하나의 웹 애플리케이션에는 하나의 Root Spring Container를 가질 수 있다.
+			- Root Spring Container에 등록된 빈(객체)는 Child Spring Container에서 참조(검색)할 수 있다.
+	-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!--  
+		필터 등록하기
+			문자 인코딩 필터 등록하기
+	-->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 
+		Child Spring Container
+			- DispatcherServlet이 생성하는 스프링 컨테이너다.
+			- 하나의 웹 애플리케이션에는 여러 개의 Child Spring Container가 있을 수 있다.
+			- Child Spring Container간에는 빈의 공유가 불가능하다.
+			- 의존하는(조립할 때 필요한) 객체가 Child Spring Container에 존재하지 않으면 
+			  Root Spring Container에서 찾아서 조립한다.
+	 -->
+	 <servlet>
+	 	<servlet-name>portal</servlet-name>
+	 	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	 	<init-param>
+	 		<param-name>contextConfigLocation</param-name>
+	 		<param-value>/WEB-INF/spring/mvc-context.xml</param-value>
+	 	</init-param>
+	 	<load-on-startup>1</load-on-startup>
+	 </servlet>
+	 <servlet-mapping>
+	 	<servlet-name>portal</servlet-name>
+	 	<url-pattern>*.do</url-pattern>
+	 </servlet-mapping>
+	 
+	 <jsp-config>
+	 	<jsp-property-group>
+	 		<url-pattern>*.jsp</url-pattern>
+	 		<include-prelude>/WEB-INF/views/common/jstl.jsp</include-prelude>
+	 	</jsp-property-group>
+	 </jsp-config>
+
+</web-app>

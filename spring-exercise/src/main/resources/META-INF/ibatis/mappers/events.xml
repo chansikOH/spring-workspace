@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="event">
+
+	<resultMap class="Event" id="eventResultMap">
+		<result property="no" column="event_no"/>
+		<result property="title" column="event_title"/>
+		<result property="contents" column="event_contents"/>
+		<result property="active" column="event_active"/>
+		<result property="createDate" column="event_create_date"/>
+	</resultMap>
+	
+	<select id="getTopNEvents" resultMap="eventResultMap">
+		select 
+			*
+		from
+			(select 
+				event_no,
+				event_title,
+				event_contents,
+				event_active,
+				event_create_date
+			from
+				spring_events
+			where
+				event_active = 'Y'
+			order by 
+				event_no desc)
+		where rownum &lt;= 3
+	</select>
+	
+	<select id="getAllEvents" resultMap="eventResultMap">
+		select
+			*
+		from
+			spring_events
+		order by
+			event_no desc
+	</select>
+	
+	<select id="getEventByNo" parameterClass="int" resultMap="eventResultMap">
+		select
+			*
+		from
+			spring_events
+		where
+			event_no = #value#
+	</select>
+	
+	<update id="updateEvent" parameterClass="Event">
+		update 
+			spring_events
+		set
+			event_title = #title#,
+			event_contents = #contents#,
+			event_active = #active#,
+			event_create_date = #createDate#
+		where
+			event_no = #no#
+	</update>
+	
+	<insert id="addEvent" parameterClass="Event">
+		insert into spring_events 
+			(event_no, event_title, event_contents)
+		values
+			(spring_seq.nextval, #title#, #contents#)
+	</insert>
+</sqlMap>

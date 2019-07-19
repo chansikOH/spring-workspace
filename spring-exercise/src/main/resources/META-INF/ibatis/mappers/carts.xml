@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="cart">
+	
+	<insert id="addCart" parameterClass="Cart">
+		insert into spring_carts (cart_no, product_no, user_id)
+		values(spring_seq.nextval, #productNo#, #userId#)
+	</insert>
+	
+	<select id="getCartByProductNoAndUserId" parameterClass="map" resultClass="Cart">
+		select
+			cart_no as no,
+			product_no as productNo,
+			user_id as userId,
+			cart_create_date as createDate
+		from
+			spring_carts
+		where
+			product_no = #productNo#
+		and
+			user_id = #userId#
+	</select>
+	
+	<delete id="removeCart" parameterClass="map">
+		delete from spring_carts 
+		where
+			product_no = #productNo#
+		and
+			user_id = #userId#
+	</delete>
+</sqlMap>

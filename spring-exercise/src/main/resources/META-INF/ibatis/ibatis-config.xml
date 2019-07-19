@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+	
+<sqlMapConfig>
+
+	<settings useStatementNamespaces="true"/>
+	
+	<typeAlias alias="Cart" type="kr.co.hta.vo.Cart"/>
+	<typeAlias alias="Category" type="kr.co.hta.vo.Category"/>
+	<typeAlias alias="Event" type="kr.co.hta.vo.Event"/>
+	<typeAlias alias="Notice" type="kr.co.hta.vo.Notice"/>
+	<typeAlias alias="Product" type="kr.co.hta.vo.Product"/>
+	<typeAlias alias="User" type="kr.co.hta.vo.User"/>
+	
+	<sqlMap resource="META-INF/ibatis/mappers/carts.xml"/>
+	<sqlMap resource="META-INF/ibatis/mappers/events.xml"/>
+	<sqlMap resource="META-INF/ibatis/mappers/notice.xml"/>
+	<sqlMap resource="META-INF/ibatis/mappers/products.xml"/>
+	<sqlMap resource="META-INF/ibatis/mappers/users.xml"/>
+</sqlMapConfig>

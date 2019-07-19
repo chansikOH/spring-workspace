@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" 
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+		
+<sqlMap namespace="notice">
+
+	<resultMap class="Notice" id="noticeResultMap">
+		<result property="no" column="notice_no"/>
+		<result property="title" column="notice_title"/>
+		<result property="contents" column="notice_contents"/>
+		<result property="createDate" column="notice_create_date"/>
+	</resultMap>
+	
+	<select id="getTopNNotices" resultMap="noticeResultMap">
+		select
+			*
+		from
+			(select
+				notice_no,
+				notice_title,
+				notice_contents,
+				notice_create_date
+			from 
+				spring_notices
+			order by
+				notice_no desc)
+		where
+			rownum &lt;= 3
+	</select>
+	
+	<select id="getAllNotices" resultMap="noticeResultMap">
+		select
+			*
+		from
+			spring_notices
+		order by
+			notice_no desc
+	</select>
+
+	<delete id="removeNotice" parameterClass="int">
+		delete from spring_notices
+		where
+			notice_no = #value#
+	</delete>
+	
+	<insert id="addNotice" parameterClass="Notice">
+		insert into spring_notices 
+			(notice_no, notice_title, notice_contents)
+		values 
+			(spring_seq.nextval, #title#, #contents#)
+	</insert>
+</sqlMap>
